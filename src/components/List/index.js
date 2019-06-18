@@ -4,14 +4,28 @@ import PropTypes from "prop-types";
 import Card from "../Card/index";
 
 const List = props => {
+  const { pokemons } = props;
   return (
-    <React.Fragment>
-      <h1>List</h1>
-      <Card />
-    </React.Fragment>
+    <ul className="List">
+      {pokemons.map(item => {
+        const { id, name, types } = item;
+        return (
+          <li key={id}>
+            <Card
+              name={name}
+              id={id}
+              imageSrc={item.sprites.front_default}
+              types={types}
+            />
+          </li>
+        );
+      })}
+    </ul>
   );
 };
 
-List.propTypes = {};
+List.propTypes = {
+  pokemons: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default List;
