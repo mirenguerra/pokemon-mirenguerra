@@ -3,15 +3,14 @@ import "./styles.scss";
 import Filter from "../Filter/index";
 import List from "../List/index";
 import getList from "../../services/getListService";
-import getPokemons from '../../services/getPokemonsService';
-
+import getPokemons from "../../services/getPokemonsService";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
-      pokemons:[],
+      pokemons: []
     };
   }
 
@@ -20,25 +19,24 @@ class App extends React.Component {
   }
 
   fetchList() {
-    getList()
-    .then(data => {
+    getList().then(data => {
       data.results.forEach(pokemon => {
-        getPokemons(pokemon.url)
-        .then(pokemonDetail => {
+        getPokemons(pokemon.url).then(pokemonDetail => {
           this.setState({
             pokemons: [...this.state.pokemons, pokemonDetail],
-          })
-        }
-        )
-      })
-    })
+            loading: false
+          });
+        });
+      });
+    });
   }
 
   render() {
+    const { pokemons } = this.state;
     return (
       <React.Fragment>
         <Filter />
-        <List />
+        {this.state.loading ? <p>Loading...</p> : <List pokemons={pokemons} />}
       </React.Fragment>
     );
   }
