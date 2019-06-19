@@ -4,10 +4,12 @@ import PropTypes from "prop-types";
 import Card from "../Card/index";
 
 const List = props => {
-  const { pokemons } = props;
+  const { pokemons, pokemonByName } = props;
   return (
     <ul className="List">
-      {pokemons.map(item => {
+      {pokemons
+      .filter(item => item.name.includes(pokemonByName))
+      .map(item => {
         const { id, name, types } = item;
         return (
           <li key={id}>
