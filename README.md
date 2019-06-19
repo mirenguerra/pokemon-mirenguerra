@@ -15,7 +15,7 @@ In order to install this project you will need to have it installed on your comp
 
 2. You can also make Fork and you will copy this repository directly into your GitHub profile.
 
-3. Run 'npm install' to install all dependencies.
+3. Run: 'npm install' to install all dependencies.
 
 4. To launch the project and see it in the browser run: 'npm start'.
 

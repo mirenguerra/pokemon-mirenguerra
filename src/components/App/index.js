@@ -4,6 +4,7 @@ import Filter from "../Filter/index";
 import List from "../List/index";
 import getList from "../../services/getListService";
 import getPokemons from "../../services/getPokemonsService";
+import getEvolution from "../../services/getEvolutionService";
 
 class App extends React.Component {
   constructor(props) {
@@ -20,17 +21,38 @@ class App extends React.Component {
     this.fetchList();
   }
 
+  // fetchList() {
+  //   getList().then(data => {
+  //     data.results.forEach(pokemon => {
+  //       getPokemons(pokemon.url).then(pokemonDetail => {
+  //         this.setState({
+  //           pokemons: [...this.state.pokemons, pokemonDetail],
+  //           loading: false
+  //         });
+  //       });
+  //     });
+  //   });
+  // }
+
   fetchList() {
     getList().then(data => {
-      data.results.forEach(pokemon => {
-        getPokemons(pokemon.url).then(pokemonDetail => {
-          this.setState({
-            pokemons: [...this.state.pokemons, pokemonDetail],
-            loading: false
-          });
+      const pokemonsList = data.results;
+      console.log(data.results);
+      
+      const pokemonDetail = pokemonsList.map(item => getPokemons(item.url));
+     
+      // const pokemonEvolution = getEvolution(pokemonDetail.id)
+
+      Promise.all(pokemonDetail, ).then(responses => {
+        this.setState({
+          pokemons: responses,
+          loading: false
         });
+        
       });
+      
     });
+    
   }
 
   handleChangeFilterByName(event) {
@@ -41,6 +63,7 @@ class App extends React.Component {
   }
 
   render() {
+    console.log(this.state.pokemons);
     const { pokemons, pokemonByName } = this.state;
     return (
       <div className="App">
