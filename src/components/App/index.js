@@ -13,6 +13,7 @@ class App extends React.Component {
       loading: true,
       pokemons: [],
       pokemonByName: "",
+      pokemonEvolution: []
     };
     this.handleChangeFilterByName = this.handleChangeFilterByName.bind(this);
   }
@@ -38,18 +39,20 @@ class App extends React.Component {
     getList().then(data => {
       let pokemonsList = data.results;
       const pokemonDetail = pokemonsList.map(item => getPokemons(item.url));
-      const pokemonEvolution = pokemonsList.map(item => {
+      pokemonsList.map(item => {
         getPokemons(item.url).then(res => {
           getEvolution(res.id).then(data => {
-            console.log(data);
+            this.setState({
+              pokemonEvolution: [...this.state.pokemonEvolution, data]
+            });
           });
         });
-      });     
+      });
 
-      Promise.all(pokemonDetail, pokemonEvolution).then(responses => {
+      Promise.all(pokemonDetail).then(responses => {
         this.setState({
           pokemons: responses,
-          loading: false,
+          loading: false
         });
       });
     });
