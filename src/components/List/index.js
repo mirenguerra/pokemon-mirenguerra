@@ -8,26 +8,27 @@ const List = props => {
   return (
     <ul className="List">
       {pokemons
-      .filter(item => item.name.includes(pokemonByName))
-      .map(item => {
-        const { id, name, types } = item;
-        return (
-          <li key={id}>
-            <Card
-              name={name}
-              id={id}
-              imageSrc={item.sprites.front_default}
-              types={types}
-            />
-          </li>
-        );
-      })}
+        .filter(item => item.name.includes(pokemonByName))
+        .map(item => {
+          const { id, name, types } = item;
+          return (
+            <li className="List__item" key={id}>
+              <Card
+                name={name}
+                id={id}
+                imageSrc={item.sprites.front_default}
+                types={types}
+              />
+            </li>
+          );
+        })}
     </ul>
   );
 };
 
 List.propTypes = {
   pokemons: PropTypes.arrayOf(PropTypes.object).isRequired,
+  pokemonByName: PropTypes.string.isRequired
 };
 
 export default List;

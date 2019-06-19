@@ -43,7 +43,11 @@ class App extends React.Component {
   render() {
     const { pokemons, pokemonByName } = this.state;
     return (
-      <React.Fragment>
+      <div className="App">
+        <div className="triangle-left" />
+        <div className="triangle-right" />
+        <div className="circle-left" />
+        <div className="circle-right" />
         <Filter
           pokemonByName={pokemonByName}
           handleChangeFilterByName={this.handleChangeFilterByName}
@@ -53,7 +57,7 @@ class App extends React.Component {
         ) : (
           <List pokemons={pokemons} pokemonByName={pokemonByName} />
         )}
-      </React.Fragment>
+      </div>
     );
   }
 }
