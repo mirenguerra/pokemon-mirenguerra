@@ -1,9 +1,10 @@
 import React from "react";
 import "./styles.scss";
-import Filter from "../Filter/index";
-import List from "../List/index";
 import getList from "../../services/getListService";
 import getPokemons from "../../services/getPokemonsService";
+import Home from '../Home/index';
+import PokemonPage from '../PokemonPage/index';
+import { Switch, Route } from "react-router-dom";
 
 class App extends React.Component {
   constructor(props) {
@@ -44,20 +45,32 @@ class App extends React.Component {
     const { pokemons, pokemonByName } = this.state;
     return (
       <div className="App">
-        <div className="triangle-left" />
-        <div className="triangle-right" />
-        <div className="circle-left" />
-        <div className="circle-right" />
-        <Filter
-          pokemonByName={pokemonByName}
-          handleChangeFilterByName={this.handleChangeFilterByName}
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <Home
+            pokemons={pokemons}
+            pokemonByName={pokemonByName}
+            handleChangeFilterByName={this.handleChangeFilterByName}
+            />
+          )}
         />
-        {this.state.loading ? (
-          <p>Loading...</p>
-        ) : (
-          <List pokemons={pokemons} pokemonByName={pokemonByName} />
-        )}
-      </div>
+        <Route
+          path="/pokemon/:pokemonId"
+          render={routerProps => {
+            return (
+              <PokemonPage
+                match={routerProps.match}
+                pokemons={pokemons}
+              />
+            );
+          }}
+        />
+      </Switch>
+    </div>
+      
     );
   }
 }
