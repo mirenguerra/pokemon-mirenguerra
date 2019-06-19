@@ -12,7 +12,7 @@ class App extends React.Component {
     this.state = {
       loading: true,
       pokemons: [],
-      pokemonByName: ""
+      pokemonByName: "",
     };
     this.handleChangeFilterByName = this.handleChangeFilterByName.bind(this);
   }
@@ -36,23 +36,23 @@ class App extends React.Component {
 
   fetchList() {
     getList().then(data => {
-      const pokemonsList = data.results;
-      console.log(data.results);
-      
+      let pokemonsList = data.results;
       const pokemonDetail = pokemonsList.map(item => getPokemons(item.url));
-     
-      // const pokemonEvolution = getEvolution(pokemonDetail.id)
+      const pokemonEvolution = pokemonsList.map(item => {
+        getPokemons(item.url).then(res => {
+          getEvolution(res.id).then(data => {
+            console.log(data);
+          });
+        });
+      });     
 
-      Promise.all(pokemonDetail, ).then(responses => {
+      Promise.all(pokemonDetail, pokemonEvolution).then(responses => {
         this.setState({
           pokemons: responses,
-          loading: false
+          loading: false,
         });
-        
       });
-      
     });
-    
   }
 
   handleChangeFilterByName(event) {
@@ -63,7 +63,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state.pokemons);
     const { pokemons, pokemonByName } = this.state;
     return (
       <div className="App">
