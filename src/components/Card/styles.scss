@@ -1,0 +1,47 @@
+@import "../../stylesheets/variables.scss";
+
+.Card{
+  z-index: 2;
+}
+
+.Card__header {
+  background-color: $colorGrey100;
+  position: relative;
+}
+
+.Card__id {
+  background-color: $colorGrey200;
+  color: $colorBronw100;
+  font-size: 10px;
+  font-weight: 500;
+  display: inline;
+  padding: 3px 8px;
+  margin: 0;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.Card__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: flex-start;
+  margin: 10px 12px 15px 12px;
+  text-align: left;
+}
+
+.Card__name {
+  margin: 5px 0;
+  text-transform: capitalize;
+}
+
+.Card__types-type {
+  display: inline;
+  font-size: 10px;
+  color: $colorBronw100;
+  margin: 0 5px 0 0;
+  padding: 1px 3px;
+  border: 1px solid $colorGrey150;
+  border-radius: 19%;
+}

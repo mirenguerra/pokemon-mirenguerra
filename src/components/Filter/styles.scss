@@ -1,0 +1,32 @@
+@import "../../stylesheets/variables.scss";
+
+.Filter {
+  text-align: center;
+  padding: 15px 0;
+}
+
+.Filter__label {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px);
+}
+
+.Filter__input {
+  text-align: center;
+  color: $colorWhite150;
+  font-family: inherit;
+  border: none;
+  box-shadow: 1px 0.5px 5px 2px $colorGrey100;
+  height: 38px;
+  width: 200px;
+
+  @media all and (min-width: 768px) {
+    width: 400px;
+  }
+
+  @media all and (min-width: 1200px) {
+    width: 600px;
+  }
+}
