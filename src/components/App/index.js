@@ -10,8 +10,10 @@ class App extends React.Component {
     super(props);
     this.state = {
       loading: true,
-      pokemons: []
+      pokemons: [],
+      pokemonByName: ""
     };
+    this.handleChangeFilterByName = this.handleChangeFilterByName.bind(this);
   }
 
   componentDidMount() {
@@ -31,13 +33,31 @@ class App extends React.Component {
     });
   }
 
+  handleChangeFilterByName(event) {
+    const { value } = event.currentTarget;
+    this.setState({
+      pokemonByName: value
+    });
+  }
+
   render() {
-    const { pokemons } = this.state;
+    const { pokemons, pokemonByName } = this.state;
     return (
-      <React.Fragment>
-        <Filter />
-        {this.state.loading ? <p>Loading...</p> : <List pokemons={pokemons} />}
-      </React.Fragment>
+      <div className="App">
+        <div className="triangle-left" />
+        <div className="triangle-right" />
+        <div className="circle-left" />
+        <div className="circle-right" />
+        <Filter
+          pokemonByName={pokemonByName}
+          handleChangeFilterByName={this.handleChangeFilterByName}
+        />
+        {this.state.loading ? (
+          <p>Loading...</p>
+        ) : (
+          <List pokemons={pokemons} pokemonByName={pokemonByName} />
+        )}
+      </div>
     );
   }
 }
