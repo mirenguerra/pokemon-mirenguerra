@@ -13,16 +13,16 @@ const Card = props => {
       <div className="Card__body">
         <h3 className="Card__name">{name}</h3>
         <div className="Card__types">
+          <ul>
           {types.map(item => {
             return (
-              <p className="Card__types-type" key={item.type.name}>
+              <li className="Card__types-type" key={item.type.name}>
                 {item.type.name.toUpperCase()}
-              </p>
+              </li>
             );
           })}
+          </ul>
         </div>
-      </div>
-      <div className="Card__footer">
         <h3 className="Card__evolution-title">Evoluciona de:</h3>
         <h4 className="Card__evolution-specie">{evolvesFrom}</h4>
       </div>
@@ -35,7 +35,7 @@ Card.propTypes = {
   id: PropTypes.number.isRequired,
   imageSrc: PropTypes.string.isRequired,
   types: PropTypes.arrayOf(PropTypes.object).isRequired,
-  evolvesfrom: PropTypes.string.isRequired,
+  evolvesFrom: PropTypes.string.isRequired
 };
 
 export default Card;

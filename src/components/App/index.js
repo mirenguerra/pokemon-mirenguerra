@@ -41,7 +41,6 @@ class App extends React.Component {
       });
 
       Promise.all(pokemonData).then(responses => {
-        console.log(responses);
         this.setState({
           pokemons: responses,
           loading: false
