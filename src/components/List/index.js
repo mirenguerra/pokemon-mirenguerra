@@ -5,7 +5,7 @@ import Card from "../Card/index";
 import {Link} from 'react-router-dom';
 
 const List = props => {
-  const { pokemons, pokemonByName, pokemonEvolution } = props;
+  const { pokemons, pokemonByName } = props;
   return (
     <ul className="List">
       {pokemons
@@ -20,7 +20,6 @@ const List = props => {
                 id={id}
                 imageSrc={item.sprites.front_default}
                 types={types}
-                pokemonEvolution={pokemonEvolution}
                 evolvesFrom={evolvesFrom}
               />
               </Link>
