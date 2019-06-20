@@ -5,22 +5,17 @@ import Filter from "../Filter/index";
 import List from "../List/index";
 
 const Home = props => {
-  const { pokemonByName, handleChangeFilterByName, pokemons } = props;
+  const { pokemonByName, handleChangeFilterByName, pokemons, loading } = props;
   return (
-    <div className="App">
-      <div className="triangle-left" />
-      <div className="triangle-right" />
-      <div className="circle-left" />
-      <div className="circle-right" />
+    <div className="Home">
       <Filter
         pokemonByName={pokemonByName}
         handleChangeFilterByName={handleChangeFilterByName}
       />
-      {this.state.loading ? (
-        <p>Loading...</p>
-      ) : (
-        <List pokemons={pokemons} pokemonByName={pokemonByName} />
-      )}
+      {loading 
+      ? (<p>Loading...</p>) 
+      : (<List pokemons={pokemons} pokemonByName={pokemonByName} />)
+      }
     </div>
   );
 };
@@ -28,7 +23,8 @@ const Home = props => {
 Home.propTypes = {
   pokemons: PropTypes.arrayOf(PropTypes.object).isRequired,
   pokemonByName: PropTypes.string.isRequired,
-  handleChangeFilterByName: PropTypes.func.isRequired
+  handleChangeFilterByName: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default Home;

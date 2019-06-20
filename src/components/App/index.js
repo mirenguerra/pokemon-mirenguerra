@@ -2,8 +2,9 @@ import React from "react";
 import "./styles.scss";
 import getList from "../../services/getListService";
 import getPokemons from "../../services/getPokemonsService";
-import Home from '../Home/index';
-import PokemonPage from '../PokemonPage/index';
+import getEvolution from "../../services/getEvolutionService";
+import Home from "../Home/index";
+import PokemonPage from "../PokemonPage/index";
 import { Switch, Route } from "react-router-dom";
 
 class App extends React.Component {
@@ -23,12 +24,27 @@ class App extends React.Component {
 
   fetchList() {
     getList().then(data => {
-      data.results.forEach(pokemon => {
-        getPokemons(pokemon.url).then(pokemonDetail => {
-          this.setState({
-            pokemons: [...this.state.pokemons, pokemonDetail],
-            loading: false
+      const pokemons = data.results;
+      const pokemonData = pokemons.map(item => {
+        let pokemon = {};
+        return getPokemons(item.url)
+          .then(pokemonDetail => {
+            pokemon = pokemonDetail;
+            return getEvolution(pokemonDetail.species.url);
+          })
+          .then(data => {
+            const evolves = data.evolves_from_species;
+            evolves
+              ? (pokemon.evolvesFrom = evolves.name)
+              : (pokemon.evolvesFrom = "");
+            return pokemon;
           });
+      });
+
+      Promise.all(pokemonData).then(responses => {
+        this.setState({
+          pokemons: responses,
+          loading: false
         });
       });
     });
@@ -42,35 +58,36 @@ class App extends React.Component {
   }
 
   render() {
-    const { pokemons, pokemonByName } = this.state;
+    const { pokemons, pokemonByName, loading } = this.state;
     return (
       <div className="App">
-      <Switch>
-        <Route
-          exact
-          path="/"
-          render={() => (
-            <Home
-            pokemons={pokemons}
-            pokemonByName={pokemonByName}
-            handleChangeFilterByName={this.handleChangeFilterByName}
-            />
-          )}
-        />
-        <Route
-          path="/pokemon/:pokemonId"
-          render={routerProps => {
-            return (
-              <PokemonPage
-                match={routerProps.match}
+        <div className="triangle-left" />
+        <div className="triangle-right" />
+        <div className="circle-left" />
+        <div className="circle-right" />
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <Home
                 pokemons={pokemons}
+                pokemonByName={pokemonByName}
+                handleChangeFilterByName={this.handleChangeFilterByName}
+                loading={loading}
               />
-            );
-          }}
-        />
-      </Switch>
-    </div>
-      
+            )}
+          />
+          <Route
+            path="/pokemon/:pokemonId"
+            render={routerProps => {
+              return (
+                <PokemonPage match={routerProps.match} pokemons={pokemons} loading={loading}/>
+              );
+            }}
+          />
+        </Switch>
+      </div>
     );
   }
 }
