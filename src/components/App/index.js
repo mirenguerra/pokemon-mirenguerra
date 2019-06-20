@@ -12,8 +12,7 @@ class App extends React.Component {
     this.state = {
       loading: true,
       pokemons: [],
-      pokemonByName: "",
-      pokemonEvolution: []
+      pokemonByName: ""
     };
     this.handleChangeFilterByName = this.handleChangeFilterByName.bind(this);
   }
@@ -22,34 +21,27 @@ class App extends React.Component {
     this.fetchList();
   }
 
-  // fetchList() {
-  //   getList().then(data => {
-  //     data.results.forEach(pokemon => {
-  //       getPokemons(pokemon.url).then(pokemonDetail => {
-  //         this.setState({
-  //           pokemons: [...this.state.pokemons, pokemonDetail],
-  //           loading: false
-  //         });
-  //       });
-  //     });
-  //   });
-  // }
-
   fetchList() {
     getList().then(data => {
-      let pokemonsList = data.results;
-      const pokemonDetail = pokemonsList.map(item => getPokemons(item.url));
-      pokemonsList.map(item => {
-        getPokemons(item.url).then(res => {
-          getEvolution(res.id).then(data => {
-            this.setState({
-              pokemonEvolution: [...this.state.pokemonEvolution, data]
-            });
+      const pokemons = data.results;
+      const pokemonData = pokemons.map(item => {
+        let pokemon = {};
+        return getPokemons(item.url)
+          .then(pokemonDetail => {
+            pokemon = pokemonDetail;
+            return getEvolution(pokemonDetail.species.url);
+          })
+          .then(data => {
+            const evolves = data.evolves_from_species;
+            evolves
+              ? (pokemon.evolvesFrom = evolves.name)
+              : (pokemon.evolvesFrom = "none");
+            return pokemon;
           });
-        });
       });
 
-      Promise.all(pokemonDetail).then(responses => {
+      Promise.all(pokemonData).then(responses => {
+        console.log(responses);
         this.setState({
           pokemons: responses,
           loading: false

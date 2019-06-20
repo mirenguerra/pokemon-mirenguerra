@@ -3,7 +3,7 @@ import "./styles.scss";
 import PropTypes from "prop-types";
 
 const Card = props => {
-  const { imageSrc, name, id, types } = props;
+  const { imageSrc, name, id, types, evolvesFrom } = props;
   return (
     <div className="Card">
       <div className="Card__header">
@@ -22,6 +22,10 @@ const Card = props => {
           })}
         </div>
       </div>
+      <div className="Card__footer">
+        <h3 className="Card__evolution-title">Evoluciona de:</h3>
+        <h4 className="Card__evolution-specie">{evolvesFrom}</h4>
+      </div>
     </div>
   );
 };
@@ -30,7 +34,8 @@ Card.propTypes = {
   name: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   imageSrc: PropTypes.string.isRequired,
-  types: PropTypes.arrayOf(PropTypes.object).isRequired
+  types: PropTypes.arrayOf(PropTypes.object).isRequired,
+  evolvesfrom: PropTypes.string.isRequired,
 };
 
 export default Card;
