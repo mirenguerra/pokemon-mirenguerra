@@ -4,6 +4,7 @@ import Filter from "../Filter/index";
 import List from "../List/index";
 import getList from "../../services/getListService";
 import getPokemons from "../../services/getPokemonsService";
+import getEvolution from "../../services/getEvolutionService";
 
 class App extends React.Component {
   constructor(props) {
@@ -22,12 +23,27 @@ class App extends React.Component {
 
   fetchList() {
     getList().then(data => {
-      data.results.forEach(pokemon => {
-        getPokemons(pokemon.url).then(pokemonDetail => {
-          this.setState({
-            pokemons: [...this.state.pokemons, pokemonDetail],
-            loading: false
+      const pokemons = data.results;
+      const pokemonData = pokemons.map(item => {
+        let pokemon = {};
+        return getPokemons(item.url)
+          .then(pokemonDetail => {
+            pokemon = pokemonDetail;
+            return getEvolution(pokemonDetail.species.url);
+          })
+          .then(data => {
+            const evolves = data.evolves_from_species;
+            evolves
+              ? (pokemon.evolvesFrom = evolves.name)
+              : (pokemon.evolvesFrom = "none");
+            return pokemon;
           });
+      });
+
+      Promise.all(pokemonData).then(responses => {
+        this.setState({
+          pokemons: responses,
+          loading: false
         });
       });
     });
