@@ -37,6 +37,11 @@ class App extends React.Component {
             evolves
               ? (pokemon.evolvesFrom = evolves.name)
               : (pokemon.evolvesFrom = "");
+
+            const evolutionChain = data.evolution_chain.url;
+            evolutionChain
+              ? (pokemon.evolutionUrl = evolutionChain)
+              : (pokemon.evolutionUrl = "");
             return pokemon;
           });
       });
@@ -82,7 +87,14 @@ class App extends React.Component {
             path="/pokemon/:pokemonId"
             render={routerProps => {
               return (
-                <PokemonPage match={routerProps.match} pokemons={pokemons} loading={loading}/>
+                <PokemonPage
+                  selectedPokemon={pokemons.find(
+                    item =>
+                      item.id === parseInt(routerProps.match.params.pokemonId)
+                  )}
+                  pokemons={pokemons}
+                  loading={loading}
+                />
               );
             }}
           />
