@@ -1,0 +1,122 @@
+@import "../../stylesheets/variables.scss";
+
+.PokemonPage {
+  height: 100%;
+  width: 100%;
+  background-color: $colorYellow;
+  position: fixed;
+}
+
+.PokemonPage__wrapper {
+  background-color: $colorWhite;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation-name: cardAppears;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  visibility: hidden;
+
+  @keyframes cardAppears {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+}
+
+.PokemenPage__header {
+  height: 40px;
+  background-color: $colorGrey200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.PokemonPage__name {
+  text-transform: capitalize;
+}
+
+.PokemonPage__body {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 5px;
+  text-align: left;
+}
+.PokemonPage__id {
+  color: $colorBronw100;
+  font-size: 10px;
+  font-weight: 500;
+  display: inline;
+  padding: 3px 8px;
+  margin: 0;
+  font-size: 20px;
+}
+
+.PokemonPage__types-type {
+  display: inline;
+  font-size: 10px;
+  color: $colorBronw100;
+  margin: 0 5px 0 0;
+  padding: 1px 3px;
+  border: 1px solid $colorGrey150;
+  border-radius: 19%;
+}
+
+.PokemonPage__profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  margin: 20px;
+  font-size: 16px;
+  text-transform: capitalize;
+}
+
+.PokemonPage__profile-header {
+  height: 40px;
+  background-color: $colorGrey200;
+  margin: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+  font-size: 8px;
+}
+
+.PokemonPage__evolution-header {
+  height: 40px;
+  background-color: $colorGrey200;
+  margin: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+  font-size: 7px;
+}
+
+.PokemonCard__evolution {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+  text-transform: capitalize;
+}
+
+.arrow {
+  height: 20px;
+  margin: 0 5px;
+}
+
+.backArrow {
+  height: 30px;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}

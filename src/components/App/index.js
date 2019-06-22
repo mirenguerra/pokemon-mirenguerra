@@ -1,9 +1,11 @@
 import React from "react";
 import "./styles.scss";
-import Filter from "../Filter/index";
-import List from "../List/index";
 import getList from "../../services/getListService";
 import getPokemons from "../../services/getPokemonsService";
+import getEvolution from "../../services/getEvolutionService";
+import Home from "../Home/index";
+import PokemonPage from "../PokemonPage/index";
+import { Switch, Route } from "react-router-dom";
 
 class App extends React.Component {
   constructor(props) {
@@ -22,12 +24,32 @@ class App extends React.Component {
 
   fetchList() {
     getList().then(data => {
-      data.results.forEach(pokemon => {
-        getPokemons(pokemon.url).then(pokemonDetail => {
-          this.setState({
-            pokemons: [...this.state.pokemons, pokemonDetail],
-            loading: false
+      const pokemons = data.results;
+      const pokemonData = pokemons.map(item => {
+        let pokemon = {};
+        return getPokemons(item.url)
+          .then(pokemonDetail => {
+            pokemon = pokemonDetail;
+            return getEvolution(pokemonDetail.species.url);
+          })
+          .then(data => {
+            const evolves = data.evolves_from_species;
+            evolves
+              ? (pokemon.evolvesFrom = evolves.name)
+              : (pokemon.evolvesFrom = "");
+
+            const evolutionChain = data.evolution_chain.url;
+            evolutionChain
+              ? (pokemon.evolutionUrl = evolutionChain)
+              : (pokemon.evolutionUrl = "");
+            return pokemon;
           });
+      });
+
+      Promise.all(pokemonData).then(responses => {
+        this.setState({
+          pokemons: responses,
+          loading: false
         });
       });
     });
@@ -41,22 +63,42 @@ class App extends React.Component {
   }
 
   render() {
-    const { pokemons, pokemonByName } = this.state;
+    const { pokemons, pokemonByName, loading } = this.state;
     return (
       <div className="App">
         <div className="triangle-left" />
         <div className="triangle-right" />
         <div className="circle-left" />
         <div className="circle-right" />
-        <Filter
-          pokemonByName={pokemonByName}
-          handleChangeFilterByName={this.handleChangeFilterByName}
-        />
-        {this.state.loading ? (
-          <p>Loading...</p>
-        ) : (
-          <List pokemons={pokemons} pokemonByName={pokemonByName} />
-        )}
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <Home
+                pokemons={pokemons}
+                pokemonByName={pokemonByName}
+                handleChangeFilterByName={this.handleChangeFilterByName}
+                loading={loading}
+              />
+            )}
+          />
+          <Route
+            path="/pokemon/:pokemonId"
+            render={routerProps => {
+              return (
+                <PokemonPage
+                  selectedPokemon={pokemons.find(
+                    item =>
+                      item.id === parseInt(routerProps.match.params.pokemonId)
+                  )}
+                  pokemons={pokemons}
+                  loading={loading}
+                />
+              );
+            }}
+          />
+        </Switch>
       </div>
     );
   }
