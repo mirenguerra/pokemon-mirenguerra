@@ -23,21 +23,36 @@ class PokemonPage extends React.Component {
   }
 
   fetchEvolution() {
-    getEvolution(this.props.selectedPokemon.evolutionUrl).then(data => {
-      const evolutionPokemons = [data.chain.species.name];
-      const evo1 = data.chain.evolves_to[0].species.name;
-      const evo2 = data.chain.evolves_to[0].evolves_to[0].species.name;
-      if (data.chain.species && evo1) {
-        evolutionPokemons.push(evo1);
-      }
-      if (data.chain.species && evo2) {
-        evolutionPokemons.push(evo2);
-      }
+    const url = this.props.selectedPokemon.evolutionUrl;
+    if (url !== null) {
+      getEvolution(url).then(data => {
+        const evolutionPokemons = [data.chain.species.name];
+        let evo2 = null;
+        let evo1 = null;
 
-      this.setState({
-        evolutionDetails: evolutionPokemons
+        if (data.chain.evolves_to && data.chain.evolves_to.length > 0) {
+          evo1 = data.chain.evolves_to[0].species.name;
+
+          if (
+            data.chain.evolves_to[0].evolves_to &&
+            data.chain.evolves_to[0].evolves_to.length > 0
+          ) {
+            evo2 = data.chain.evolves_to[0].evolves_to[0].species.name;
+          }
+        }
+
+        if (evo1 !== null) {
+          evolutionPokemons.push(evo1);
+        }
+        if (evo2 !== null) {
+          evolutionPokemons.push(evo2);
+        }
+
+        this.setState({
+          evolutionDetails: evolutionPokemons
+        });
       });
-    });
+    }
   }
 
   render() {
@@ -45,7 +60,7 @@ class PokemonPage extends React.Component {
     const { evolutionDetails } = this.state;
     let pokeAbilities = "";
     selectedPokemon.abilities.map(item => {
-      return pokeAbilities += `${item.ability.name}, `;
+      return (pokeAbilities += `${item.ability.name}, `);
     });
 
     return (
@@ -92,7 +107,10 @@ class PokemonPage extends React.Component {
                   {`Peso: ${changeUnits(selectedPokemon.weight)} kg`}
                 </p>
                 <p className="PokemonPage__abilities">
-                  {`Habilidades: ${pokeAbilities.substring(0, pokeAbilities.length - 2)}`}
+                  {`Habilidades: ${pokeAbilities.substring(
+                    0,
+                    pokeAbilities.length - 2
+                  )}`}
                 </p>
               </div>
               <div className="PokemonPage__evolution-header">
@@ -104,8 +122,14 @@ class PokemonPage extends React.Component {
                 <p>{evolutionDetails[0]}</p>
                 <img className="arrow" src={arrow} alt="flecha" />
                 <p>{evolutionDetails[1]}</p>
-                <img className="arrow" src={arrow} alt="flecha" />
-                <p>{evolutionDetails[2]}</p>
+                {evolutionDetails[2] ? (
+                  <React.Fragment>
+                    <img className="arrow" src={arrow} alt="flecha" />
+                    <p>{evolutionDetails[2]}</p>
+                  </React.Fragment>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             <Link to="/">
