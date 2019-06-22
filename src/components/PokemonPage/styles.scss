@@ -1,8 +1,17 @@
 @import "../../stylesheets/variables.scss";
 
 .PokemonPage{
+  height: 100%;
+  width: 100%;
+  background-color: $colorYellow;
+  position: fixed;
+  top:0;
+  left: 0;
+}
+
+.PokemonPage__wrapper{
   height: 400px;
-  width: 280px;
+  width: 290px;
   background-color: $colorWhite;
   position: fixed;
   top: 50%;
@@ -78,7 +87,7 @@
   align-items: center;
   justify-content: center;
   text-transform: capitalize;
-  font-size: 8px;
+  font-size: 7px;
 }
 
 .PokemonCard__evolution{
@@ -92,4 +101,11 @@
 .arrow{
   height: 20px;
   margin: 0 5px;
+}
+
+.backArrow{
+  height: 30px;
+  position: fixed;
+  top: 20px;
+  left: 20px;
 }
