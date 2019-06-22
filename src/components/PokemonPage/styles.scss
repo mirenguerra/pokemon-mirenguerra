@@ -1,13 +1,33 @@
 @import "../../stylesheets/variables.scss";
 
-.PokemonPage{
-  height: 400px;
-  width: 280px;
+.PokemonPage {
+  height: 100%;
+  width: 100%;
+  background-color: $colorYellow;
+  position: fixed;
+}
+
+.PokemonPage__wrapper {
   background-color: $colorWhite;
   position: fixed;
-  top: 50%;
   left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
+  animation-name: cardAppears;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  visibility: hidden;
+
+  @keyframes cardAppears {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
 }
 
 .PokemenPage__header {
@@ -49,7 +69,7 @@
   border-radius: 19%;
 }
 
-.PokemonPage__profile{
+.PokemonPage__profile {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -59,7 +79,7 @@
   text-transform: capitalize;
 }
 
-.PokemonPage__profile-header{
+.PokemonPage__profile-header {
   height: 40px;
   background-color: $colorGrey200;
   margin: 0 5px;
@@ -70,7 +90,7 @@
   font-size: 8px;
 }
 
-.PokemonPage__evolution-header{
+.PokemonPage__evolution-header {
   height: 40px;
   background-color: $colorGrey200;
   margin: 0 5px;
@@ -78,10 +98,10 @@
   align-items: center;
   justify-content: center;
   text-transform: capitalize;
-  font-size: 8px;
+  font-size: 7px;
 }
 
-.PokemonCard__evolution{
+.PokemonCard__evolution {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,7 +109,14 @@
   text-transform: capitalize;
 }
 
-.arrow{
+.arrow {
   height: 20px;
   margin: 0 5px;
+}
+
+.backArrow {
+  height: 30px;
+  position: fixed;
+  top: 20px;
+  left: 20px;
 }
