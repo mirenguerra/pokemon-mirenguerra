@@ -93,7 +93,6 @@ class App extends React.Component {
                       item.id === parseInt(routerProps.match.params.pokemonId)
                   )}
                   pokemons={pokemons}
-                  loading={loading}
                 />
               );
             }}

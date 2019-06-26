@@ -23,51 +23,57 @@ class PokemonPage extends React.Component {
   }
 
   fetchEvolution() {
-    const url = this.props.selectedPokemon.evolutionUrl;
-    if (url !== null) {
-      getEvolution(url).then(data => {
-        const evolutionPokemons = [data.chain.species.name];
-        let evo2 = null;
-        let evo1 = null;
+    if (this.props.selectedPokemon) {
+      const url = this.props.selectedPokemon.evolutionUrl;
+      if (url !== null) {
+        getEvolution(url).then(data => {
+          const evolutionPokemons = [data.chain.species.name];
+          let evo2 = null;
+          let evo1 = null;
 
-        if (data.chain.evolves_to && data.chain.evolves_to.length > 0) {
-          evo1 = data.chain.evolves_to[0].species.name;
+          if (data.chain.evolves_to && data.chain.evolves_to.length > 0) {
+            evo1 = data.chain.evolves_to[0].species.name;
 
-          if (
-            data.chain.evolves_to[0].evolves_to &&
-            data.chain.evolves_to[0].evolves_to.length > 0
-          ) {
-            evo2 = data.chain.evolves_to[0].evolves_to[0].species.name;
+            if (
+              data.chain.evolves_to[0].evolves_to &&
+              data.chain.evolves_to[0].evolves_to.length > 0
+            ) {
+              evo2 = data.chain.evolves_to[0].evolves_to[0].species.name;
+            }
           }
-        }
 
-        if (evo1 !== null) {
-          evolutionPokemons.push(evo1);
-        }
-        if (evo2 !== null) {
-          evolutionPokemons.push(evo2);
-        }
+          if (evo1 !== null) {
+            evolutionPokemons.push(evo1);
+          }
+          if (evo2 !== null) {
+            evolutionPokemons.push(evo2);
+          }
 
-        this.setState({
-          evolutionDetails: evolutionPokemons
+          this.setState({
+            evolutionDetails: evolutionPokemons
+          });
         });
-      });
+      }
+    } else {
+      return <p>Loading...</p>;
     }
   }
 
   render() {
-    const { loading, selectedPokemon } = this.props;
+    const { selectedPokemon } = this.props;
     const { evolutionDetails } = this.state;
     let pokeAbilities = "";
-    selectedPokemon.abilities.map(item => {
-      return (pokeAbilities += `${item.ability.name}, `);
-    });
+    if (selectedPokemon) {
+      selectedPokemon.abilities.map(item => {
+        return (pokeAbilities += `${item.ability.name}, `);
+      });
+    } else {
+      return <p>Loading...</p>;
+    }
 
     return (
       <React.Fragment>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
+        {selectedPokemon && evolutionDetails ? (
           <div className="PokemonPage">
             <div className="PokemonPage__wrapper">
               <div className="PokemenPage__header">
@@ -136,6 +142,8 @@ class PokemonPage extends React.Component {
               <img className="backArrow" src={backArrow} alt="Volver atrás" />
             </Link>
           </div>
+        ) : (
+          <p>Loading...</p>
         )}
       </React.Fragment>
     );
@@ -144,7 +152,6 @@ class PokemonPage extends React.Component {
 
 PokemonPage.propTypes = {
   selectedPokemon: PropTypes.object,
-  loading: PropTypes.bool.isRequired
 };
 
 export default PokemonPage;
